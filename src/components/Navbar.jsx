@@ -103,7 +103,7 @@ const Navbar = () => {
                 <div className="absolute top-8 w-32 bg-white py-2 hidden group-hover:block">
                   <p>
                     <span className="inline-block py-2 px-4 font-semibold">
-                      Hi, {user.displayName}
+                      Hi, {user.displayName || "User"}
                     </span>
                   </p>
                   <p
