@@ -1,35 +1,40 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useDispatch } from "react-redux";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
-import Navbar from "../components/Navbar";
 import RandomSection from "../components/RandomSection";
 import SearchSection from "../components/SearchSection";
 import { login, logout } from "../store/userSlice";
 
 const Home = () => {
-  const auth = getAuth()
-  const dispatch = useDispatch()
+  const auth = getAuth();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     onAuthStateChanged(auth, (userAuth) => {
-      if (userAuth) {
+      const userLocal = JSON.parse(localStorage.getItem("user"));
+      if (userAuth && userLocal) {
+        const { displayName, email, uid } = userAuth;
         dispatch(
           login({
-            email: userAuth.email,
-            uid: userAuth.uid,
-            user: userAuth.displayName,
+            email,
+            uid,
+            displayName,
           })
         );
+        localStorage.setItem("user", true);
       } else {
         dispatch(logout());
+        localStorage.removeItem("user");
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <>
-      <Navbar />
       <Hero />
       <RandomSection />
       <SearchSection />

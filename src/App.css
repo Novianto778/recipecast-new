@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 .btn {
@@ -24,6 +24,10 @@
 
 .btn-secondary {
   @apply bg-primary text-black border-none;
+}
+
+.bg-profile {
+  background-image: url("./assets/about.jpg");
 }
 
 .clip-text {

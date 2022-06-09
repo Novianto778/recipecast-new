@@ -1,5 +1,5 @@
 import React from "react";
-import HeroImage from "../assets/hero-image.png"
+import HeroImage from "../assets/hero-image.png";
 
 const Hero = () => {
   return (
@@ -10,12 +10,12 @@ const Hero = () => {
             Let’s Cooking with Favorite Recipes
           </h1>
           <p className="text-lg">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Repellendus voluptatem consectetur mollitia cum optio placeat,
-            reiciendis, provident veniam odio, iure esse nostrum eveniet amet
-            itaque.
+            Find and share everyday cooking inspiration on Recipecast. Discover
+            recipes, cooks, videos, and how-tos based on the food you love.
           </p>
-          <button className="btn btn-primary btn-curved mt-12">Get Started</button>
+          <button className="btn btn-primary btn-curved mt-12">
+            Get Started
+          </button>
         </div>
         <div className="hidden self-start md:block">
           <img src={HeroImage} alt="food" className="block w-80 mx-auto" />

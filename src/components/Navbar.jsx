@@ -1,11 +1,20 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import RecipeCastLogo from "../assets/logo.png";
-import { ABOUT, HOME, LOGIN } from "../constant/routes";
+import { ABOUT, HOME, LOGIN, RECIPE } from "../constant/routes";
+import Avatar from "../assets/avatar.svg";
+import { logout } from "../store/userSlice";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("user");
+  };
+
   return (
     <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 shadow h-16 flex items-center">
       <div className="container flex flex-wrap justify-between items-center w-10/12 mx-auto">
@@ -70,10 +79,10 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                to=""
+                to={RECIPE}
                 className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
               >
-                Menu
+                Recipes
               </Link>
             </li>
             {!user ? (
@@ -87,7 +96,26 @@ const Navbar = () => {
                 </Link>
               </li>
             ) : (
-              <p>test</p>
+              <div className="relative group">
+                <span className="cursor-pointer  group-hover:block">
+                  <img src={Avatar} alt="avatar" className="w-8 h-8" />
+                </span>
+                <div className="absolute top-8 w-32 bg-white py-2 hidden group-hover:block">
+                  <p>
+                    <span className="inline-block py-2 px-4 font-semibold">
+                      Hi, {user.displayName}
+                    </span>
+                  </p>
+                  <p
+                    className="hover:bg-secondary cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    <span className="inline-block py-2 px-4 select-none">
+                      Logout
+                    </span>
+                  </p>
+                </div>
+              </div>
             )}
           </ul>
         </div>

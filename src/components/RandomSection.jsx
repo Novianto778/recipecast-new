@@ -4,12 +4,11 @@ import { getRandomRecipes } from "../store/recipeSlice";
 import RecipeCard from "./RecipeCard";
 
 const RandomSection = () => {
-  // const [randomRecipe, setRandomRecipe] = useState([])
   const dispatch = useDispatch();
   const { recipes, pending } = useSelector((state) => state.recipes);
 
   useEffect(() => {
-    // dispatch(getRandomRecipes());
+    dispatch(getRandomRecipes());
   }, [dispatch]);
 
   return (

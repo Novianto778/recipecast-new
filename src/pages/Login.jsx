@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import ReviewSlider from "../components/ReviewSlider";
 import { HOME, SIGN_UP } from "../constant/routes";
 import GoogleIcon from "../assets/google-icon.svg";
 import { app } from "../services/firebase";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { login } from "../store/userSlice";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
@@ -18,19 +24,38 @@ const Login = () => {
   const googleSignIn = async () => {
     const response = await signInWithPopup(firebaseAuth, provider);
     const authUser = response.user;
+    const { displayName, email, uid } = authUser;
     dispatch(
       login({
-        user: authUser.displayName,
-        email: authUser.email,
-        uid: authUser.uid,
+        displayName,
+        email,
+        uid,
       })
     );
-    navigate(HOME)
+
+    localStorage.setItem("user", true);
+    navigate(HOME);
+  };
+
+  const signInWithEmail = () => {
+    signInWithEmailAndPassword(firebaseAuth, email, password)
+      .then((authUser) => {
+        const { displayName, email, uid } = authUser;
+        dispatch(
+          login({
+            displayName,
+            email,
+            uid,
+          })
+        );
+
+        localStorage.setItem("user", true);
+        navigate(HOME);
+      });
   };
 
   return (
     <>
-      <Navbar />
       <div className="w-full">
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-8 mx-auto w-10/12 mt-6 items-center justify-between">
           <div className="w-full pb-4">
@@ -43,7 +68,11 @@ const Login = () => {
                 className="btn btn-small border-2 border-body w-10/12 rounded relative"
                 onClick={googleSignIn}
               >
-                <img src={GoogleIcon} alt="google" className="absolute left-12 w-6 h-6" />
+                <img
+                  src={GoogleIcon}
+                  alt="google"
+                  className="absolute left-12 w-6 h-6"
+                />
                 Sign In with Google
               </button>
             </div>
@@ -56,6 +85,7 @@ const Login = () => {
                 type="text"
                 className="w-full px-4 py-2 bg-gray-100 focus:outline-gray-300 text-base rounded"
                 placeholder="your email address"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <label
                 htmlFor="password"
@@ -67,8 +97,9 @@ const Login = () => {
                 type="password"
                 className="w-full px-4 py-2 bg-gray-100 focus:outline-gray-300 text-base rounded"
                 placeholder="your password"
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <button className="btn btn-secondary w-full  mt-8 text-lg font-semibold rounded">
+              <button className="btn btn-secondary w-full  mt-8 text-lg font-semibold rounded" onClick={signInWithEmail}>
                 Login
               </button>
               <p className="text-gray-500 text-center mt-2">

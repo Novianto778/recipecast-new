@@ -1,23 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import useDebounce from "../hooks/useDebounce";
 import { DETAIL } from "../constant/routes";
+import RecipeSlider from "./RecipeSlider";
 
 const SearchSection = () => {
   const [input, setInput] = useState("");
+  const [queryRecipes, setQueryRecipes] = useState([]);
   const [searchedRecipes, setSearchedRecipes] = useState([]);
   const debounceValue = useDebounce(input);
-  
+  const inputRef = useRef();
+
   useEffect(() => {
     async function fetchFromInput() {
       const response = await fetch(
         `https://api.spoonacular.com/recipes/autocomplete?apiKey=${process.env.REACT_APP_API_KEY}&number=4&query=${debounceValue}`
-        );
-        const res = await response.json();
-        setSearchedRecipes(res);
-      }
+      );
+      const res = await response.json();
+      setSearchedRecipes(res);
+    }
     fetchFromInput();
   }, [debounceValue]);
+
+  const handleSearch = async () => {
+    const response = await fetch(
+      `https://api.spoonacular.com/recipes/complexSearch?query=${debounceValue}&apiKey=${process.env.REACT_APP_API_KEY}`
+    );
+    const res = await response.json();
+    setInput("");
+    inputRef.current.reset()
+    setQueryRecipes(res.results);
+  };
 
   return (
     <div className="container w-10/12 mx-auto my-12">
@@ -46,19 +59,22 @@ const SearchSection = () => {
               ></path>
             </svg>
           </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block p-4 pl-14 w-full text-sm text-gray-900 bg-gray-50 rounded-full border border-gray-200 focus:ring-blue-500 outline-none"
-            placeholder="Search recipes, food..."
-            onInput={(e) => setInput(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="text-white absolute right-2.5 bottom-2.5 bg-primary font-medium rounded-full text-sm px-4 py-2"
-          >
-            Search
-          </button>
+          <form ref={inputRef}>
+            <input
+              type="search"
+              id="default-search"
+              className="block p-4 pl-14 w-full text-sm text-gray-900 bg-gray-50 rounded-full border border-gray-200 focus:ring-blue-500 outline-none"
+              placeholder="Search recipes, food..."
+              onInput={(e) => setInput(e.target.value)}
+            />
+            <button
+              type="button"
+              className="text-white absolute right-2.5 bottom-2.5 bg-primary font-medium rounded-full text-sm px-4 py-2"
+              onClick={handleSearch}
+            >
+              Search
+            </button>
+          </form>
         </div>
 
         {searchedRecipes.length > 0 && (
@@ -75,6 +91,11 @@ const SearchSection = () => {
           </div>
         )}
       </div>
+      {queryRecipes.length > 0 && (
+        <div className="mt-8">
+          <RecipeSlider recipes={queryRecipes} />
+        </div>
+      )}
     </div>
   );
 };

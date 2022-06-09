@@ -26,6 +26,9 @@ module.exports = {
       },
       aspectRatio: {
         '4/3': '4 / 3',
+      },
+      backgroundImage: {
+        'overlay': 'linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))',
       }
     }
   },

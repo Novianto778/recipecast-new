@@ -21,6 +21,15 @@ export const getRecipeById = createAsyncThunk("recipes/getById", async (id) => {
   return recipe;
 });
 
+export const getPopular = createAsyncThunk("recipes/getPopular", async (id) => {
+  const response = await fetch(
+    `https://api.spoonacular.com/recipes/complexSearch?sort=popularity&apiKey=` +
+      process.env.REACT_APP_API_KEY
+  );
+  const { results } = await response.json();
+  return results;
+});
+
 export const recipeSlice = createSlice({
   name: "recipes",
   initialState: {
@@ -28,6 +37,7 @@ export const recipeSlice = createSlice({
     recipe: {},
     pending: true,
     error: false,
+    popular: []
   },
   reducers: {},
   extraReducers: {
@@ -50,6 +60,10 @@ export const recipeSlice = createSlice({
     [getRecipeById.pending]: (state) => {
       state.pending = true;
       state.error = false;
+    },
+    [getPopular.fulfilled]: (state, action) => {
+      state.popular = action.payload;
+      state.pending = false;
     },
   },
 });
