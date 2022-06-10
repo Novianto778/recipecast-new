@@ -4,7 +4,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import useWindowSize from "../hooks/useWindowSize";
 
-const RecipeSlider = ({ recipes }) => {
+const RecipeSlider = ({ recipes, numPerPage }) => {
   const size = useWindowSize()
   const handlePerPage = (size) => {
     if(size.width >= 1024) {
@@ -20,7 +20,7 @@ const RecipeSlider = ({ recipes }) => {
     <div className="mx-auto w-10/12">
       <Splide
         options={{
-          perPage: handlePerPage(size),
+          perPage: numPerPage || handlePerPage(size),
           arrows: true,
           pagination: false,
           drag: "free",

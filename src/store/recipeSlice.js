@@ -30,6 +30,15 @@ export const getPopular = createAsyncThunk("recipes/getPopular", async (id) => {
   return results;
 });
 
+export const getSimilar = createAsyncThunk("recipes/getSimilar", async (id) => {
+  const response = await fetch(
+    `https://api.spoonacular.com/recipes/${id}/similar?number=6&apiKey=` +
+      process.env.REACT_APP_API_KEY
+  );
+  const  results  = await response.json();
+  return results;
+});
+
 export const recipeSlice = createSlice({
   name: "recipes",
   initialState: {
@@ -37,7 +46,8 @@ export const recipeSlice = createSlice({
     recipe: {},
     pending: true,
     error: false,
-    popular: []
+    popular: [],
+    similar: []
   },
   reducers: {},
   extraReducers: {
@@ -63,6 +73,10 @@ export const recipeSlice = createSlice({
     },
     [getPopular.fulfilled]: (state, action) => {
       state.popular = action.payload;
+      state.pending = false;
+    },
+    [getSimilar.fulfilled]: (state, action) => {
+      state.similar = action.payload;
       state.pending = false;
     },
   },

@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRandomRecipes } from "../store/recipeSlice";
+import { getRandomRecipes, getSimilar } from "../store/recipeSlice";
 import RecipeCard from "./RecipeCard";
 
 const RandomSection = () => {
   const dispatch = useDispatch();
-  const { recipes, pending } = useSelector((state) => state.recipes);
+  const { recipes, similar, pending } = useSelector((state) => state.recipes);
 
   useEffect(() => {
     dispatch(getRandomRecipes());
   }, [dispatch]);
+
 
   return (
     <div className="mt-12 container w-10/12 mx-auto">

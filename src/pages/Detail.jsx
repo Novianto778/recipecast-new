@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import BackIcon from "../assets/arrow-icon.svg";
-import { getRecipeById } from "../store/recipeSlice";
+import { getRecipeById, getSimilar } from "../store/recipeSlice";
+import RecipeSlider from "../components/RecipeSlider";
 import Clock from "../assets/clock-icon.svg";
 
 const Detail = () => {
@@ -10,11 +11,12 @@ const Detail = () => {
   const [recipeInstruction, setRecipeInstruction] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { recipe, pending } = useSelector((state) => state.recipes);
+  const { recipe, similar, pending } = useSelector((state) => state.recipes);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getRecipeById(id));
+    dispatch(getSimilar(id));
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -22,12 +24,18 @@ const Detail = () => {
   }, [recipe]);
 
   useEffect(() => {
-    if (!pending && Object.keys(detailRecipe).length !== 0 && detailRecipe.analyzedInstructions.length > 0)
+    if (
+      !pending &&
+      Object.keys(detailRecipe).length !== 0 &&
+      detailRecipe.analyzedInstructions.length > 0
+    )
       setRecipeInstruction(detailRecipe.analyzedInstructions[0].steps);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detailRecipe]);
-  
+
+  // console.log(similar)
+
   const content =
     recipeInstruction.length > 0 ? recipeInstruction : recipe.summary;
   const ingredients = [].concat(
@@ -107,7 +115,7 @@ const Detail = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-8 col-span-2 max-h-screen sticky top-0">
+            <div className="mt-8 col-span-2 top-0">
               <img
                 src={detailRecipe.image}
                 alt=""
@@ -127,6 +135,10 @@ const Detail = () => {
                 ) : (
                   <p>Not found</p>
                 )}
+              </div>
+              <div className="w-full">
+                <p className="text-lg font-semibold mb-4">Similar Recipe</p>
+                <RecipeSlider recipes={similar} numPerPage={2} />
               </div>
             </div>
           </div>
