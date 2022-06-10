@@ -22,11 +22,12 @@ const Detail = () => {
   }, [recipe]);
 
   useEffect(() => {
-    if (!pending && Object.keys(detailRecipe).length !== 0)
+    if (!pending && Object.keys(detailRecipe).length !== 0 && detailRecipe.analyzedInstructions.length > 0)
       setRecipeInstruction(detailRecipe.analyzedInstructions[0].steps);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detailRecipe]);
-
+  
   const content =
     recipeInstruction.length > 0 ? recipeInstruction : recipe.summary;
   const ingredients = [].concat(
