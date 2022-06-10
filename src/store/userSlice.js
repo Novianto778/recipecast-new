@@ -6,7 +6,7 @@ const firebaseAuth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = createAsyncThunk(
-  "recipes/getRandom",
+  "user/signIn",
   async () => {
     const response = await signInWithPopup(firebaseAuth, provider);
     const { displayName, email, uid } = response.user;

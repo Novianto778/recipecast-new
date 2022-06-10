@@ -9,6 +9,7 @@ import { logout } from "../store/userSlice";
 const Navbar = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  console.log(user)
 
   const handleLogout = () => {
     dispatch(logout());
