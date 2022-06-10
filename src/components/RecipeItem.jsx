@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { DETAIL } from "../constant/routes";
 
 const RecipeItem = ({recipe}) => {
-  console.log(recipe)
   return (
     <Link to={DETAIL + '/' + recipe.id} className="w-full bg-white shadow-md relative max-w-xs cursor-pointer">
       <img

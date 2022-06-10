@@ -30,6 +30,15 @@ export const getPopular = createAsyncThunk("recipes/getPopular", async (id) => {
   return results;
 });
 
+export const getVeggie = createAsyncThunk("recipes/getVeggie", async () => {
+  const response = await fetch(
+    `https://api.spoonacular.com/recipes/complexSearch?diet=vegetarian&number=10&apiKey=` +
+      process.env.REACT_APP_API_KEY
+  );
+  const { results } = await response.json();
+  return results;
+});
+
 export const getSimilar = createAsyncThunk("recipes/getSimilar", async (id) => {
   const response = await fetch(
     `https://api.spoonacular.com/recipes/${id}/similar?number=6&apiKey=` +
@@ -47,7 +56,8 @@ export const recipeSlice = createSlice({
     pending: true,
     error: false,
     popular: [],
-    similar: []
+    similar: [],
+    veggie: []
   },
   reducers: {},
   extraReducers: {
@@ -77,6 +87,10 @@ export const recipeSlice = createSlice({
     },
     [getSimilar.fulfilled]: (state, action) => {
       state.similar = action.payload;
+      state.pending = false;
+    },
+    [getVeggie.fulfilled]: (state, action) => {
+      state.veggie = action.payload;
       state.pending = false;
     },
   },
