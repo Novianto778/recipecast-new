@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRandomRecipes, getSimilar } from "../store/recipeSlice";
+import { getRandomRecipes } from "../store/recipeSlice";
 import RecipeCard from "./RecipeCard";
 
 const RandomSection = () => {
   const dispatch = useDispatch();
-  const { recipes, similar, pending } = useSelector((state) => state.recipes);
+  const { recipes, pending } = useSelector((state) => state.recipes);
 
   useEffect(() => {
     dispatch(getRandomRecipes());

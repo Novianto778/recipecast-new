@@ -6,13 +6,17 @@ import useWindowSize from "../hooks/useWindowSize";
 
 const RecipeSlider = ({ recipes, numPerPage }) => {
   const size = useWindowSize()
-  const handlePerPage = (size) => {
+  const handlePerPage = () => {
     if(size.width >= 1024) {
-      return 4;
+      return numPerPage ||  4;
     }
     
-    if(size.width > 400 && size.width < 1024) {
-      return 2;
+    if(size.width >= 600 && size.width < 1024) {
+      return numPerPage || 2;
+    }
+
+    if(size.width < 600) {
+      return 1;
     }
   }
 
@@ -20,7 +24,7 @@ const RecipeSlider = ({ recipes, numPerPage }) => {
     <div className="mx-auto w-10/12">
       <Splide
         options={{
-          perPage: numPerPage || handlePerPage(size),
+          perPage: handlePerPage(),
           arrows: true,
           pagination: false,
           drag: "free",

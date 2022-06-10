@@ -34,7 +34,6 @@ const Detail = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detailRecipe]);
 
-  // console.log(similar)
 
   const content =
     recipeInstruction.length > 0 ? recipeInstruction : recipe.summary;
@@ -138,7 +137,7 @@ const Detail = () => {
               </div>
               <div className="w-full">
                 <p className="text-lg font-semibold mb-4">Similar Recipe</p>
-                <RecipeSlider recipes={similar} numPerPage={2} />
+                <RecipeSlider recipes={similar} numPerPage={1} />
               </div>
             </div>
           </div>
